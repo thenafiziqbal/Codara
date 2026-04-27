@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #04060f;
+  --neon-green: #39ff14;
+  --neon-blue: #00b3ff;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: #e7ecff;
+  min-height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(0, 179, 255, 0.12), transparent 60%),
+    radial-gradient(1000px 500px at -10% 110%, rgba(57, 255, 20, 0.08), transparent 60%),
+    var(--bg);
+}
+
+/* Subtle scanline */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.01) 0,
+    rgba(255, 255, 255, 0.01) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  z-index: 0;
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition;
+  }
+  .btn-primary {
+    @apply btn bg-neon-blue/90 text-bg hover:bg-neon-blue shadow-glow;
+  }
+  .btn-ghost {
+    @apply btn border border-white/10 text-ink hover:bg-white/5;
+  }
+  .btn-neon {
+    @apply btn bg-neon-green text-bg hover:brightness-110 shadow-neon;
+  }
+  .card {
+    @apply rounded-2xl border border-white/10 bg-bg-card/70 backdrop-blur-sm p-5;
+  }
+  .input {
+    @apply w-full rounded-lg border border-white/10 bg-bg-soft/80 px-3 py-2 text-sm
+           text-ink placeholder:text-ink-dim focus:border-neon-blue focus:outline-none;
+  }
+  .label {
+    @apply mb-1 block text-xs uppercase tracking-wider text-ink-dim;
+  }
+  .badge {
+    @apply inline-flex items-center rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-xs;
+  }
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-neon-blue via-neon-green to-neon-blue;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, rgba(255,255,255,0.04), rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+@keyframes shimmer {
+  0% { background-position: 0% 0; }
+  100% { background-position: -200% 0; }
+}

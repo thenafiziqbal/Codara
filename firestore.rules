@@ -1,0 +1,59 @@
+rules_version = '2';
+
+// IMPORTANT: deploy these rules to Firestore. Without them the database is
+// either fully open or fully closed, both of which break the app.
+//
+//   firebase deploy --only firestore:rules
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // -------- helpers --------
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+    function isAdmin() {
+      return isSignedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // ------------ users ------------
+    // A user can read their own profile. They can create/update only the
+    // safe subset of fields. The `plan` and `role` fields are server-only
+    // (the Next.js Admin SDK bypasses these rules; clients can't escalate).
+    match /users/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+      allow create: if isOwner(uid)
+        && !('plan' in request.resource.data)
+        && !('role' in request.resource.data);
+      allow update: if isOwner(uid)
+        && !('plan' in request.resource.data.diff(resource.data).affectedKeys())
+        && !('role' in request.resource.data.diff(resource.data).affectedKeys());
+      allow delete: if isAdmin();
+    }
+
+    // ------------ certificates ------------
+    // Certificates are publicly verifiable (read-only) — that's the point of
+    // the QR verify URL. Writes go through the server (Admin SDK).
+    match /certificates/{id} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // ------------ site settings ------------
+    // Public read so the marketing pages can render. Admin-only writes.
+    match /site/settings {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ------------ default deny ------------
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

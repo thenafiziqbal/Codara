@@ -1,0 +1,34 @@
+{
+  "name": "codara",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Codara AI — Code Intelligence Platform (Repo Analyze, Docs Generator, AI Detection, Health Certificates)",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "firebase": "^12.12.1",
+    "firebase-admin": "^12.7.0",
+    "framer-motion": "^12.38.0",
+    "isomorphic-dompurify": "^2.18.0",
+    "jszip": "^3.10.1",
+    "lucide-react": "^0.456.0",
+    "next": "14.2.35",
+    "qrcode": "^1.5.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwind-merge": "^3.5.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "14.2.35",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14"
+  }
+}
